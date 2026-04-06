@@ -1,32 +1,37 @@
 import datetime as dt
+from db import db_connect
 class MemoManager:
     def __init__(self):
-        self.memos = []
         self.status = {
             "keyword": None,
             "important": False,
             "sort_by": "all",
             "sort_order": None
         }
-    def add_memo(self, content, important=False): # 메모 추가
+    def add_memo(self, content, important=False , user_id = "guest"): # 메모 추가
         content = content.strip()
         if not content:
             return
         date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        memo = {
-            "content": content,
-            "important": important,
-            "deleted": False,
-            "date": date
-        }
-        self.memos.append(memo)
+        conn = db_connect()
+        cursor = conn.cursor()
+        sql = "INSERT INTO memos (user_id, content, important, deleted, created_at) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql, (user_id, content, important, False, date))
+        conn.commit()
+        conn.close()
     def view_memos(self): # 메모 보기
-        if not self.memos:
+        conn = db_connect()
+        cursor = conn.cursor()
+        sql = "SELECT id,content, important, deleted, created_at FROM memos"
+        cursor.execute(sql)
+        memos = cursor.fetchall()
+        conn.close()
+        print(memos)
+        if not memos:
             return []
         view_memos = []
-        for idx,memo in enumerate(self.memos):
+        for memo in memos:
             memo = memo.copy()
-            memo["index"] = idx
             if memo["deleted"]:
                 continue
             view_memos.append(memo)
@@ -105,6 +110,7 @@ class MemoManager:
     def reset_memos(self): # 메모 초기화
         self.memos = []
         return
-
+mm = MemoManager()
+mm.view_memos()
     
     

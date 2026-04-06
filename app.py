@@ -4,7 +4,7 @@ app = Flask(__name__)
 mm = MemoManager()
 @app.route("/")
 def index():
-    memos = mm.get_final_memos()
+    memos = mm.view_memos()
     return render_template("index.html", memos = memos)
 @app.route("/add", methods=["POST"])
 def add_memo():
