@@ -4,7 +4,7 @@ app = Flask(__name__)
 mm = MemoManager()
 @app.route("/")
 def index():
-    memos = mm.view_memos()
+    memos = mm.get_final_memos()
     return render_template("index.html", memos = memos)
 @app.route("/add", methods=["POST"])
 def add_memo():
@@ -16,6 +16,19 @@ def add_memo():
 def search_memo():
     keyword = request.form.get("keyword")
     mm.set_keyword(keyword)
+    return redirect("/")
+@app.route("/toggle-important-filter", methods=["POST"])
+def toggle_important_filter():
+    mm.set_status_important()
+    return redirect("/")
+@app.route("/sort", methods=["POST"])
+def sort_memos():
+    sort_by = request.form.get("sort_by")
+    mm.set_sort_by(sort_by)
+    return redirect("/")
+@app.route("/reset", methods=["POST"])
+def reset():
+    mm.reset_status()
     return redirect("/")
 
 

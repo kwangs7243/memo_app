@@ -61,7 +61,10 @@ class MemoManager:
             self.status["sort_by"] = "all"
             self.status["sort_order"] = None
         return
-    def set_status_important(self): # 중요 표시/해제 설정
+    def set_status_important(self): # 중요보기 설정
+        self.status["important"] = not self.status["important"]
+        return
+    def set_important(self): # 중요 설정/해제
         self.status["important"] = not self.status["important"]
         return
     def get_filtered_memos(self,memos): # 필터링된 메모 가져오기
