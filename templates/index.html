@@ -10,14 +10,7 @@
     <div class="wrap">
         <header class="topbar">
             <h1>Memo Manager</h1>
-            <div class="topbar-actions">
-                <form action="/reset-all" method="post">
-                    <button type="submit" class="ghost-btn">전체 초기화</button>
-                </form>
-            </div>
         </header>
-    
-
         <main class="layout">
             <section class="panel form-panel">
                 <h2>메모 작성</h2>
@@ -84,11 +77,11 @@
                         </div>
                         <div class="memo-actions">
                             <form action="/toggle-important" method="post">
-                                <input type="hidden" name="index" value={{memo.index}}>
+                                <input type="hidden" name="id" value={{memo.id}}>
                                 <button type="submit" class="ghost-btn small">중요 해제</button>
                             </form>
                             <form action="/delete" method="post">
-                                <input type="hidden" name="index" value={{memo.index}}>
+                                <input type="hidden" name="id" value={{memo.id}}>
                                 <button type="submit" class="danger-btn small">삭제</button>
                             </form>
                         </div>
@@ -103,11 +96,11 @@
                         </div>
                         <div class="memo-actions">
                             <form action="/toggle-important" method="post">
-                                <input type="hidden" name="index" value="{{memo.index}}">
+                                <input type="hidden" name="id" value="{{memo.id}}">
                                 <button type="submit" class="ghost-btn small">중요 표시</button>
                             </form>
                             <form action="/delete" method="post">
-                                <input type="hidden" name="index" value="{{memo.index}}">
+                                <input type="hidden" name="id" value="{{memo.id}}">
                                 <button type="submit" class="danger-btn small">삭제</button>
                             </form>
                         </div>

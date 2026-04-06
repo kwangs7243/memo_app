@@ -4,7 +4,7 @@ app = Flask(__name__)
 mm = MemoManager()
 @app.route("/")
 def index():
-    memos = mm.view_memos()
+    memos = mm.get_final_memos()
     return render_template("index.html", memos = memos)
 @app.route("/add", methods=["POST"])
 def add_memo():
@@ -32,13 +32,13 @@ def reset():
     return redirect("/")
 @app.route("/toggle-important", methods=["POST"])
 def toggle_important():
-    original_index = int(request.form.get("index"))
-    mm.set_important(original_index)
+    id = int(request.form.get("id"))
+    mm.set_important(id)
     return redirect("/")
 @app.route("/delete", methods=["POST"])
 def delete_memo():
-    original_index = int(request.form.get("index"))
-    mm.delete_memo(original_index)
+    id = int(request.form.get("id"))
+    mm.delete_memo(id)
     return redirect("/")
 @app.route("/reset-all", methods=["POST"])
 def reset_memos():

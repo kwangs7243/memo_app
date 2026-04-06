@@ -26,7 +26,6 @@ class MemoManager:
         cursor.execute(sql)
         memos = cursor.fetchall()
         conn.close()
-        print(memos)
         if not memos:
             return []
         view_memos = []
@@ -36,19 +35,29 @@ class MemoManager:
                 continue
             view_memos.append(memo)
         return view_memos
-    def delete_memo(self, index): # 메모 삭제
+    def delete_memo(self, id): # 메모 삭제
         try:
-            original_index = int(index)
+            id = int(id)
         except:
             return
-        self.memos[original_index]["deleted"] = True
+        conn = db_connect()
+        cursor = conn.cursor()
+        sql = "UPDATE memos SET deleted = %s WHERE id = %s"
+        cursor.execute(sql, (True, id))
+        conn.commit()
+        conn.close()
         return
-    def set_important(self, index): # 중요 표시/해제
+    def set_important(self, id): # 중요 표시/해제
         try:
-            original_index = int(index)
+            id = int(id)
         except:
             return
-        self.memos[original_index]["important"] = not self.memos[original_index]["important"]
+        conn = db_connect()
+        cursor = conn.cursor()
+        sql = "UPDATE memos SET important = NOT important WHERE id = %s"
+        cursor.execute(sql, (id,))
+        conn.commit()
+        conn.close()
         return
     def set_keyword(self, keyword): # 검색어 설정
         keyword = keyword.strip()
@@ -107,10 +116,4 @@ class MemoManager:
             "sort_order": None
         }
         return
-    def reset_memos(self): # 메모 초기화
-        self.memos = []
-        return
-mm = MemoManager()
-mm.view_memos()
-    
     
