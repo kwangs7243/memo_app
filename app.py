@@ -30,6 +30,21 @@ def sort_memos():
 def reset():
     mm.reset_status()
     return redirect("/")
+@app.route("/toggle-important", methods=["POST"])
+def toggle_important():
+    original_index = int(request.form.get("index"))
+    mm.set_important(original_index)
+    return redirect("/")
+@app.route("/delete", methods=["POST"])
+def delete_memo():
+    original_index = int(request.form.get("index"))
+    mm.delete_memo(original_index)
+    return redirect("/")
+@app.route("/reset-all", methods=["POST"])
+def reset_memos():
+    mm.reset_memos()
+    mm.reset_status()
+    return redirect("/")
 
 
 if __name__ == "__main__":
