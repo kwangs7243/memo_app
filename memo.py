@@ -115,6 +115,7 @@ class MemoManager:
         return memos
     def reset_status(self): # 상태 초기화
         self.status = {
+            "user_id": None,
             "keyword": None,
             "important": False,
             "sort_by": "all",
