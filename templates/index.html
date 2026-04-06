@@ -52,7 +52,6 @@
                     <div class="inline-group">
                         <button type="submit" name="sort_by" value="date" class="ghost-btn">날짜 정렬</button>
                         <button type="submit" name="sort_by" value="content" class="ghost-btn">내용 정렬</button>
-                        <button type="submit" name="sort_by" value="important" class="ghost-btn">중요도 정렬</button>
                     </div>
                 </form>
 
@@ -64,17 +63,21 @@
             <section class="panel list-panel">
                 <div class="list-header">
                     <h2>메모 목록</h2>
-                    <div class="list-count">0 items</div>
+                    <div class="list-count">{{ memos|length }} items</div>
                 </div>
-
+                {% if not memos %}
+                <p>메모가 없습니다.</p>
+                {% else %}
+                {% for memo in memos %}
                 <div class="memo-list">
+                    {% if memo.important %}
                     <article class="memo-card important">
                         <div class="memo-main">
                             <div class="memo-meta">
                                 <span class="badge">중요</span>
-                                <span class="date">2026-04-06 12:00:00</span>
+                                <span class="date">{{ memo.date }}</span>
                             </div>
-                            <p class="memo-content">중요 메모 예시입니다.</p>
+                            <p class="memo-content">{{ memo.content }}</p>
                         </div>
                         <div class="memo-actions">
                             <form action="/toggle-important" method="post">
@@ -87,13 +90,13 @@
                             </form>
                         </div>
                     </article>
-
+                    {% else %}
                     <article class="memo-card">
                         <div class="memo-main">
                             <div class="memo-meta">
-                                <span class="date">2026-04-06 11:30:00</span>
+                                <span class="date">{{ memo.date }}</span>
                             </div>
-                            <p class="memo-content">일반 메모 예시입니다.</p>
+                            <p class="memo-content">{{ memo.content }}</p>
                         </div>
                         <div class="memo-actions">
                             <form action="/toggle-important" method="post">
@@ -106,7 +109,10 @@
                             </form>
                         </div>
                     </article>
+                    {% endif %}
                 </div>
+                {% endfor %}
+                {% endif %}
             </section>
         </main>
     </div>
