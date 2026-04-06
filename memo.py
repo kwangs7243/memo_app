@@ -63,7 +63,8 @@ class MemoManager:
         keyword = keyword.strip()
         if not keyword:
             self.status["keyword"] = None
-        self.status["keyword"] = keyword
+        else:
+            self.status["keyword"] = keyword
         return
     def set_sort_by(self, sort_by): # 정렬 기준 설정
         if sort_by != self.status["sort_by"]:
