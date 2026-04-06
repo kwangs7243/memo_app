@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memo Manager</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="wrap">
+        <header class="topbar">
+            <h1>Memo Manager</h1>
+            <div class="topbar-actions">
+                <button type="button" class="ghost-btn">전체 초기화</button>
+            </div>
+        </header>
+
+        <main class="layout">
+            <section class="panel form-panel">
+                <h2>메모 작성</h2>
+                <form action="/add" method="post" class="memo-form">
+                    <textarea name="content" placeholder="메모를 입력하세요"></textarea>
+
+                    <div class="form-row">
+                        <label class="check-label">
+                            <input type="checkbox" name="important">
+                            <span>중요 메모</span>
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <button type="submit" class="primary-btn">추가</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel control-panel">
+                <h2>검색 / 필터 / 정렬</h2>
+
+                <form action="/search" method="post" class="control-group">
+                    <div class="inline-group">
+                        <input type="text" name="keyword" placeholder="검색어 입력">
+                        <button type="submit" class="primary-btn">검색</button>
+                    </div>
+                </form>
+
+                <form action="/toggle-important-filter" method="post" class="control-group">
+                    <button type="submit" class="ghost-btn">중요 메모만 보기</button>
+                </form>
+
+                <form action="/sort" method="post" class="control-group">
+                    <div class="inline-group">
+                        <button type="submit" name="sort_by" value="date" class="ghost-btn">날짜 정렬</button>
+                        <button type="submit" name="sort_by" value="content" class="ghost-btn">내용 정렬</button>
+                        <button type="submit" name="sort_by" value="important" class="ghost-btn">중요도 정렬</button>
+                    </div>
+                </form>
+
+                <form action="/reset" method="post" class="control-group">
+                    <button type="submit" class="danger-btn">상태 초기화</button>
+                </form>
+            </section>
+
+            <section class="panel list-panel">
+                <div class="list-header">
+                    <h2>메모 목록</h2>
+                    <div class="list-count">0 items</div>
+                </div>
+
+                <div class="memo-list">
+                    <article class="memo-card important">
+                        <div class="memo-main">
+                            <div class="memo-meta">
+                                <span class="badge">중요</span>
+                                <span class="date">2026-04-06 12:00:00</span>
+                            </div>
+                            <p class="memo-content">중요 메모 예시입니다.</p>
+                        </div>
+                        <div class="memo-actions">
+                            <form action="/toggle-important" method="post">
+                                <input type="hidden" name="index" value="0">
+                                <button type="submit" class="ghost-btn small">중요 해제</button>
+                            </form>
+                            <form action="/delete" method="post">
+                                <input type="hidden" name="index" value="0">
+                                <button type="submit" class="danger-btn small">삭제</button>
+                            </form>
+                        </div>
+                    </article>
+
+                    <article class="memo-card">
+                        <div class="memo-main">
+                            <div class="memo-meta">
+                                <span class="date">2026-04-06 11:30:00</span>
+                            </div>
+                            <p class="memo-content">일반 메모 예시입니다.</p>
+                        </div>
+                        <div class="memo-actions">
+                            <form action="/toggle-important" method="post">
+                                <input type="hidden" name="index" value="1">
+                                <button type="submit" class="ghost-btn small">중요 표시</button>
+                            </form>
+                            <form action="/delete" method="post">
+                                <input type="hidden" name="index" value="1">
+                                <button type="submit" class="danger-btn small">삭제</button>
+                            </form>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

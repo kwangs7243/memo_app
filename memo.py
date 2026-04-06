@@ -9,6 +9,9 @@ class MemoManager:
             "sort_order": None
         }
     def add_memo(self, content, important=False): # 메모 추가
+        content = content.strip()
+        if not content:
+            return
         date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         memo = {
             "content": content,
@@ -26,7 +29,7 @@ class MemoManager:
             memo["index"] = idx
             if memo["deleted"]:
                 continue
-            self.view_memos.append(memo)
+            view_memos.append(memo)
         return view_memos
     def delete_memo(self, index): # 메모 삭제
         try:
@@ -45,11 +48,11 @@ class MemoManager:
     def set_keyword(self, keyword): # 검색어 설정
         keyword = keyword.strip()
         if not keyword:
-            return 
+            self.status["keyword"] = None
         self.status["keyword"] = keyword
         return
     def set_sort_by(self, sort_by): # 정렬 기준 설정
-        if sort_by != sort_by:
+        if sort_by != self.status["sort_by"]:
             self.status["sort_by"] = sort_by
             self.status["sort_order"] = "asc"
         elif self.status["sort_order"] == "asc":
@@ -62,12 +65,12 @@ class MemoManager:
         self.status["important"] = not self.status["important"]
         return
     def get_filtered_memos(self,memos): # 필터링된 메모 가져오기
-        view_memos = memos
-        if not view_memos:
+        filtered_memos = memos
+        if not filtered_memos:
             return []
         keyword = self.status["keyword"]
         if keyword is not None:
-            filtered_memos  = [memo for memo in view_memos if keyword in memo["content"]]
+            filtered_memos  = [memo for memo in filtered_memos if keyword in memo["content"]]
         return filtered_memos
     def get_sorted_memos(self,memos): # 정렬된 메모 가져오기
         sorted_memos = memos
