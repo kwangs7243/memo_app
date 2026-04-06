@@ -31,11 +31,11 @@ def sign_in(user_id, password):
 def get_user_id(user_id):
     conn = db_connect()
     cursor = conn.cursor()
-    sql = "SELECT id From user_info WHERE user_id = %s"
+    sql = "SELECT user_id From user_info WHERE user_id = %s"
     cursor.execute(sql, (user_id,))
     result = cursor.fetchone()
     conn.close()
     if result:
-        return result["id"]
+        return result["user_id"]
     else:
         return None

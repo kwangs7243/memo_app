@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect
 from memo import MemoManager
+from auth import check_id_duplication, sign_up, sign_in, get_user_id
 app = Flask(__name__)
 mm = MemoManager()
 @app.route("/")
@@ -45,6 +46,24 @@ def reset_memos():
     mm.reset_memos()
     mm.reset_status()
     return redirect("/")
+@app.route("/signup", methods=["POST"])
+def signup():
+    user_id = request.form.get("user_id")
+    if check_id_duplication(user_id):
+        return
+    password = request.form.get("password")
+    sign_up(user_id, password)
+    return redirect("/login")
+@app.route("/login", methods=["POST"])
+def login():
+    user_id = request.form.get("user_id")
+    password = request.form.get("password")
+    if sign_in(user_id, password):
+        user_id = get_user_id(user_id)
+        mm.set_user_id(user_id)
+        return redirect("/")
+    else:
+        return redirect("/login")
 
 
 if __name__ == "__main__":

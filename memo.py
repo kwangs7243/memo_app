@@ -3,13 +3,17 @@ from db import db_connect
 class MemoManager:
     def __init__(self):
         self.status = {
+            "user_id": None,
             "keyword": None,
             "important": False,
             "sort_by": "all",
             "sort_order": None
         }
-    def add_memo(self, user_id, content, important=False): # 메모 추가
+    def set_user_id(self, user_id):
+        self.status["user_id"] = user_id
+    def add_memo(self, content, important=False): # 메모 추가
         content = content.strip()
+        user_id = self.status["user_id"]
         if not content:
             return
         date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
