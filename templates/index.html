@@ -46,7 +46,7 @@
 
                 <form action="/sort" method="post" class="control-group">
                     <div class="inline-group">
-                        <button type="submit" name="sort_by" value="date" class="ghost-btn">날짜 정렬</button>
+                        <button type="submit" name="sort_by" value="created_at" class="ghost-btn">날짜 정렬</button>
                         <button type="submit" name="sort_by" value="content" class="ghost-btn">내용 정렬</button>
                     </div>
                 </form>
@@ -71,7 +71,7 @@
                         <div class="memo-main">
                             <div class="memo-meta">
                                 <span class="badge">중요</span>
-                                <span class="date">{{ memo.date }}</span>
+                                <span class="created-at">{{ memo.created_at }}</span>
                             </div>
                             <p class="memo-content">{{ memo.content }}</p>
                         </div>
@@ -90,7 +90,7 @@
                     <article class="memo-card">
                         <div class="memo-main">
                             <div class="memo-meta">
-                                <span class="date">{{ memo.date }}</span>
+                                <span class="created-at">{{ memo.created_at }}</span>
                             </div>
                             <p class="memo-content">{{ memo.content }}</p>
                         </div>

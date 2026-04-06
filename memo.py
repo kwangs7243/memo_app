@@ -8,7 +8,7 @@ class MemoManager:
             "sort_by": "all",
             "sort_order": None
         }
-    def add_memo(self, content, important=False , user_id = "guest"): # 메모 추가
+    def add_memo(self, user_id, content, important=False): # 메모 추가
         content = content.strip()
         if not content:
             return
