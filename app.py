@@ -52,7 +52,7 @@ def signup_page():
 def signup():
     user_id = request.form.get("user_id")
     if check_id_duplication(user_id):
-        return
+        return render_template("signup.html", id_msg="이미 존재하는 아이디입니다." , user_id=user_id)
     password = request.form.get("passwd")
     sign_up(user_id, password)
     return redirect("/login")
@@ -62,13 +62,16 @@ def login_page():
 @app.route("/login", methods=["POST"])
 def login():
     user_id = request.form.get("user_id")
+    user_id = get_user_id(user_id)
+    if not user_id:
+        return render_template("login.html", login_msg="존재하지 않는 아이디입니다.", user_id=request.form.get("user_id"))
     password = request.form.get("passwd")
     if sign_in(user_id, password):
         user_id = get_user_id(user_id)
         mm.set_user_id(user_id)
         return redirect("/")
     else:
-        return redirect("/login")
+        return render_template("login.html", login_msg="비밀번호가 일치하지 않습니다.", user_id=request.form.get("user_id"))
 
 
 if __name__ == "__main__":
