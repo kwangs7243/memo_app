@@ -26,8 +26,8 @@ class MemoManager:
     def view_memos(self): # 메모 보기
         conn = db_connect()
         cursor = conn.cursor()
-        sql = "SELECT id,content, important, deleted, created_at FROM memos"
-        cursor.execute(sql)
+        sql = "SELECT id, user_id, content, important, deleted, created_at FROM memos WHERE user_id = %s and deleted = %s"
+        cursor.execute(sql, (self.status["user_id"], False))
         memos = cursor.fetchall()
         conn.close()
         if not memos:
@@ -35,8 +35,6 @@ class MemoManager:
         view_memos = []
         for memo in memos:
             memo = memo.copy()
-            if memo["deleted"]:
-                continue
             view_memos.append(memo)
         return view_memos
     def delete_memo(self, id): # 메모 삭제
@@ -46,8 +44,8 @@ class MemoManager:
             return
         conn = db_connect()
         cursor = conn.cursor()
-        sql = "UPDATE memos SET deleted = %s WHERE id = %s"
-        cursor.execute(sql, (True, id))
+        sql = "UPDATE memos SET deleted = %s WHERE id = %s and user_id = %s"
+        cursor.execute(sql, (True, id, self.status["user_id"]))
         conn.commit()
         conn.close()
         return
@@ -58,8 +56,8 @@ class MemoManager:
             return
         conn = db_connect()
         cursor = conn.cursor()
-        sql = "UPDATE memos SET important = NOT important WHERE id = %s"
-        cursor.execute(sql, (id,))
+        sql = "UPDATE memos SET important = NOT important WHERE id = %s and user_id = %s"
+        cursor.execute(sql, (id, self.status["user_id"]))
         conn.commit()
         conn.close()
         return
