@@ -9,51 +9,33 @@ def index():
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")
-    mm.set_user_id(user_id)
-    memos = mm.get_final_memos()
+    memos = mm.get_final_memos(user_id)
     return render_template("index.html", memos = memos)
 @app.route("/add", methods=["POST"])
 def add_memo():
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")
-    mm.set_user_id(user_id)
     content = request.form.get("content")
     important = request.form.get("important") == "on"
-    mm.add_memo(content, important)
+    mm.add_memo(content, user_id, important)
     return redirect("/")
 @app.route("/search", methods=["POST"])
 def search_memo():
-    user_id = session.get("user_id")
-    if not user_id:
-        return redirect("/login")
-    mm.set_user_id(user_id)
     keyword = request.form.get("keyword")
     mm.set_keyword(keyword)
     return redirect("/")
 @app.route("/toggle-important-filter", methods=["POST"])
 def toggle_important_filter():
-    user_id = session.get("user_id")
-    if not user_id:
-        return redirect("/login")
-    mm.set_user_id(user_id)
     mm.set_status_important()
     return redirect("/")
 @app.route("/sort", methods=["POST"])
 def sort_memos():
-    user_id = session.get("user_id")
-    if not user_id:
-        return redirect("/login")
-    mm.set_user_id(user_id)
     sort_by = request.form.get("sort_by")
     mm.set_sort_by(sort_by)
     return redirect("/")
 @app.route("/reset", methods=["POST"])
 def reset():
-    user_id = session.get("user_id")
-    if not user_id:
-        return redirect("/login")
-    mm.set_user_id(user_id)
     mm.reset_status()
     return redirect("/")
 @app.route("/toggle-important", methods=["POST"])
@@ -61,26 +43,16 @@ def toggle_important():
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")
-    mm.set_user_id(user_id)
     id = int(request.form.get("id"))
-    mm.set_important(id)
+    mm.set_important(id, user_id)
     return redirect("/")
 @app.route("/delete", methods=["POST"])
 def delete_memo():
     user_id = session.get("user_id")
     if not user_id:
         return redirect("/login")
-    mm.set_user_id(user_id)
     id = int(request.form.get("id"))
-    mm.delete_memo(id)
-    return redirect("/")
-@app.route("/reset-all", methods=["POST"])
-def reset_view():
-    user_id = session.get("user_id")
-    if not user_id:     
-        return redirect("/login")
-    mm.set_user_id(user_id)
-    mm.reset_status()
+    mm.delete_memo(id, user_id)
     return redirect("/")
 @app.route("/signup")
 def signup_page():

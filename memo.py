@@ -8,11 +8,8 @@ class MemoManager:
             "sort_by": "all",
             "sort_order": None
         }
-    def set_user_id(self, user_id):
-        self.status["user_id"] = user_id
-    def add_memo(self, content, important=False): # 메모 추가
+    def add_memo(self, content, user_id, important=False): # 메모 추가
         content = content.strip()
-        user_id = self.status["user_id"]
         if not content:
             return
         date = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -22,11 +19,11 @@ class MemoManager:
         cursor.execute(sql, (user_id, content, important, False, date))
         conn.commit()
         conn.close()
-    def view_memos(self): # 메모 보기
+    def view_memos(self, user_id): # 메모 보기
         conn = db_connect()
         cursor = conn.cursor()
         sql = "SELECT id, user_id, content, important, deleted, created_at FROM memos WHERE user_id = %s and deleted = %s"
-        cursor.execute(sql, (self.status["user_id"], False))
+        cursor.execute(sql, (user_id, False))
         memos = cursor.fetchall()
         conn.close()
         if not memos:
@@ -36,7 +33,7 @@ class MemoManager:
             memo = memo.copy()
             view_memos.append(memo)
         return view_memos
-    def delete_memo(self, id): # 메모 삭제
+    def delete_memo(self, id, user_id): # 메모 삭제
         try:
             id = int(id)
         except:
@@ -44,11 +41,11 @@ class MemoManager:
         conn = db_connect()
         cursor = conn.cursor()
         sql = "UPDATE memos SET deleted = %s WHERE id = %s and user_id = %s"
-        cursor.execute(sql, (True, id, self.status["user_id"]))
+        cursor.execute(sql, (True, id, user_id))
         conn.commit()
         conn.close()
         return
-    def set_important(self, id): # 중요 표시/해제
+    def set_important(self, id, user_id): # 중요 표시/해제
         try:
             id = int(id)
         except:
@@ -56,7 +53,7 @@ class MemoManager:
         conn = db_connect()
         cursor = conn.cursor()
         sql = "UPDATE memos SET important = NOT important WHERE id = %s and user_id = %s"
-        cursor.execute(sql, (id, self.status["user_id"]))
+        cursor.execute(sql, (id, user_id))
         conn.commit()
         conn.close()
         return
@@ -104,8 +101,8 @@ class MemoManager:
         if self.status["important"]:
             important_memos = [memo for memo in important_memos if memo["important"]]
         return important_memos
-    def get_final_memos(self): # 최종적으로 보여줄 메모 가져오기
-        memos = self.view_memos()
+    def get_final_memos(self, user_id): # 최종적으로 보여줄 메모 가져오기
+        memos = self.view_memos(user_id)
         memos = self.get_filtered_memos(memos)
         memos = self.get_important_memos(memos)
         memos = self.get_sorted_memos(memos)
